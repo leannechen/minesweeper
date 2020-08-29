@@ -74,6 +74,36 @@ class App extends React.Component {
     squareList: [],
   }
 
+  componentDidMount() {
+    // compute square
+    this.setupSquareList();
+  }
+
+  setupSquareList = () => {
+    const columns = 9;
+    const rows = 8;
+    const mines = 10;
+
+    const nestedArr = new Array(rows)
+      .fill()
+      .map((item, yIndex) => {
+        return new Array(columns)
+          .fill()
+          .map((item, xIndex) => ({
+            x: xIndex + 1,
+            y: yIndex + 1,
+            hasMine: false,
+            showNumber: 0,
+            isOpened: false,
+          }))
+      })
+
+    this.setState({ squareList: nestedArr.flat() });
+    console.log(nestedArr.flat());
+
+    // flatten nestedArr
+  };
+
   getSquareClassNames = ({ isOpened, showNumber, hasMine }) => {
     let classes = ["square"];
     if(isOpened) {
