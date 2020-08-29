@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap');
+
 :root {
   --background-color: #262626;
   --square-width: 40px;
@@ -12,6 +14,7 @@
 
 body {
   background-color: var(--background-color);
+  font-family: 'Orbitron', sans-serif;
 }
 
 .main {
@@ -20,6 +23,10 @@ body {
   padding-top: 10vh;
   text-align: center;
   color: whitesmoke;
+}
+
+.site-title {
+  margin-bottom: 2rem;
 }
 
 .board {
@@ -35,6 +42,9 @@ body {
 }
 
 .square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   list-style: none;
   width: var(--square-width);
   height: var(--square-width);
@@ -45,10 +55,31 @@ body {
   border-right-color: #808080;
   border-bottom-color: #808080;
   user-select: none;
+  font-size: 1.8rem;
+  color: #0034ff;
 }
 
 .square.opened {
   background-color: #c0c0c0;
   border: 2px solid #8b8b8b;
-  //border-color: #8b8b8b;
+}
+
+.square.number-1 {
+  color: #0034ff;
+}
+
+.square.number-2 {
+  color: #007f00;
+}
+
+.square.number-3 {
+  color: #ff1b01;
+}
+
+.square.bomb {
+  background-color: #ff1b01;
+  background-image: url("./img/bomb-solid.svg");
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
 }

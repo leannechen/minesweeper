@@ -1,4 +1,5 @@
 import React from 'react';
+import imgBomb from './img/bomb-solid.svg';
 import './App.css';
 
 function App() {
@@ -70,13 +71,14 @@ function App() {
   return (
     <div className="App">
       <main className="main">
-        <h1>Minesweeper</h1>
+        <h1 className="site-title">Minesweeper</h1>
         <ul className="board">
           { mockData.map((item) =>
             <li 
               key={`${item.x}${item.y}`} 
-              className={`square ${item.x === 2 && "opened"}`}
+              className={`square ${item.x === 2 && item.y === 2 && "opened bomb"} number-2`}
             >
+              {/*{ item.x === 2 && item.y === 2 && "2" }*/}
               {/*X{item.x}Y{item.y}*/}
             </li>)
           }
