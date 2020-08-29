@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 
 function App() {
+  
   const mockData = [
     {
       x: 1,
@@ -70,28 +71,16 @@ function App() {
 
   const getSquareClassNames = ({ isOpened, showNumber, hasMine }) => {
     let classes = ["square"];
-    if(!isOpened) {
-      return classes;
-    }
-    if(hasMine) {
-      return [
-        ...classes,
-        "opened",
-        "bomb",
-      ].join(" ");
-    } else if(showNumber > 0) {
-      return [
-        ...classes,
-        "opened",
-        `number-${showNumber}`,
-      ].join(" ");
-    } else {
-      return [
-        ...classes,
-        "opened",
-      ].join(" ");
+    if(isOpened) {
+      classes = [ ...classes, "opened"];
+      if(hasMine) {
+        classes = [ ...classes, "bomb" ];
+      } else if(showNumber > 0) {
+        classes = [ ...classes, `number-${showNumber}` ];
+      }
     }
 
+    return classes.join(" ");
   }
 
   return (
@@ -103,7 +92,6 @@ function App() {
             <li 
               key={`${item.x}${item.y}`} 
               className={getSquareClassNames(item)}
-              // className={["square", "opened"].join(" ")}
             >
               { item.showNumber > 0 && item.showNumber }
               {/*X{item.x}Y{item.y}*/}
