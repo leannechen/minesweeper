@@ -6,63 +6,63 @@ const mockData = [
     x: 1,
     y: 1,
     hasMine: false,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: false,
   },
   {
     x: 2,
     y: 1,
     hasMine: false,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: true,
   },
   {
     x: 3,
     y: 1,
     hasMine: false,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: false,
   },
   {
     x: 1,
     y: 2,
     hasMine: false,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: false,
   },
   {
     x: 2,
     y: 2,
     hasMine: false,
-    showNumber: 2,
+    adjacentMines: 2,
     isOpened: true,
   },
   {
     x: 3,
     y: 2,
     hasMine: false,
-    showNumber: 1,
+    adjacentMines: 1,
     isOpened: true,
   },
   {
     x: 1,
     y: 3,
     hasMine: true,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: true,
   },
   {
     x: 2,
     y: 3,
     hasMine: false,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: false,
   },
   {
     x: 3,
     y: 3,
     hasMine: false,
-    showNumber: 0,
+    adjacentMines: 0,
     isOpened: false,
   },
 ]
@@ -93,7 +93,7 @@ class App extends React.Component {
             x: xIndex + 1,
             y: yIndex + 1,
             hasMine: false,
-            showNumber: 0,
+            adjacentMines: 0,
             isOpened: false,
           }))
       })
@@ -104,14 +104,14 @@ class App extends React.Component {
     // flatten nestedArr
   };
 
-  getSquareClassNames = ({ isOpened, showNumber, hasMine }) => {
+  getSquareClassNames = ({ isOpened, adjacentMines, hasMine }) => {
     let classes = ["square"];
     if(isOpened) {
       classes = [ ...classes, "opened"];
       if(hasMine) {
         classes = [ ...classes, "bomb" ];
-      } else if(showNumber > 0) {
-        classes = [ ...classes, `number-${showNumber}` ];
+      } else if(adjacentMines > 0) {
+        classes = [ ...classes, `number-${adjacentMines}` ];
       }
     }
 
@@ -129,7 +129,7 @@ class App extends React.Component {
                 key={`${item.x}${item.y}`}
                 className={this.getSquareClassNames(item)}
               >
-                { item.showNumber > 0 && item.showNumber }
+                { item.adjacentMines > 0 && item.adjacentMines }
                 {/*X{item.x}Y{item.y}*/}
 
               </li>)
