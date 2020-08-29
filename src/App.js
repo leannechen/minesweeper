@@ -119,12 +119,13 @@ class App extends React.Component {
   }
 
   render() {
+    const { squareList } = this.state;
     return (
       <div className="App">
         <main className="main">
           <h1 className="site-title">Minesweeper</h1>
           <ul className="board">
-            { mockData.map((item) =>
+            { squareList.map((item) =>
               <li
                 key={`${item.x}${item.y}`}
                 className={this.getSquareClassNames(item)}
