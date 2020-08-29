@@ -79,6 +79,21 @@ class App extends React.Component {
     this.setupSquareList();
   }
 
+  handleSquareClick = (item) => () => {
+    const { x, y } = item;
+    const { squareList } = this.state;
+    const targetSquareIndex = squareList.findIndex(square => square.x === x && square.y === y);
+    const newSquareList = squareList.map((square, index) => (index === targetSquareIndex)?
+      {
+        ...square,
+        isOpened: true,
+      }
+      :
+      square
+    )
+    this.setState({ squareList: newSquareList });
+  }
+
   setupSquareList = () => {
     const columns = 9;
     const rows = 8;
@@ -129,6 +144,7 @@ class App extends React.Component {
               <li
                 key={`${item.x}${item.y}`}
                 className={this.getSquareClassNames(item)}
+                onClick={this.handleSquareClick(item)}
               >
                 { item.adjacentMines > 0 && item.adjacentMines }
                 {/*X{item.x}Y{item.y}*/}
