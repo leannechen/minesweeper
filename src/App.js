@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import styles from './App.module.css';
 import Square from './components/Square';
 
 const mockData = [
@@ -175,9 +175,9 @@ class App extends React.Component {
     const { squareList } = this.state;
     return (
       <div className="App">
-        <main className="main">
-          <h1 className="site-title">Minesweeper</h1>
-          <ul className="board">
+        <main className={styles.main}>
+          <h1 className={styles.siteTitle}>Minesweeper</h1>
+          <ul className={styles.board}>
             { squareList.map((item) => (
               <Square
                 {...item}
