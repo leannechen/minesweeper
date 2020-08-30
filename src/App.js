@@ -122,6 +122,7 @@ class App extends React.Component {
     const square = squareList.find(square => square.id === squareId);
     const { hasMine, isCleared, adjacentMines } = square;
     let newSquareList = [];
+    let copiedSquareList = [...squareList];
 
     if(isCleared) {
       return;
@@ -133,6 +134,42 @@ class App extends React.Component {
         ...square,
         ...(square.hasMine && { isCleared: true }),
       }))
+    } else if(adjacentMines === 0) {
+      const neighborCoords = this.getNeighborCoords(square, columnCount, rowCount);
+
+      let newNeighbors = [];
+
+      // Clear neighbors
+      neighborCoords.forEach((neighborCoord) => {
+        const neighborIndex = squareList.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
+        console.log(neighborIndex);
+        const neighbor = squareList[neighborIndex];
+        if(neighbor.isCleared) {
+          return;
+        } else if(neighbor.adjacentMines > 0) {
+          return;
+        } else {
+          copiedSquareList[neighborIndex] = {
+            ...neighbor,
+            isCleared: true,
+          }
+          // newNeighbors.push({ ...neighbor, isCleared: true });
+        }
+      })
+
+      console.log(copiedSquareList);
+      console.log(squareList);
+
+      // FIXME: for dev
+      newSquareList = squareList.map((square) => (square.id === squareId)?
+        {
+          ...square,
+          isCleared: true,
+        }
+        :
+        square
+      )
+
     } else {
       // Clears the square
       newSquareList = squareList.map((square) => (square.id === squareId)?
