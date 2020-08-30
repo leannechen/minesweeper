@@ -156,7 +156,7 @@ class App extends React.Component {
             isCleared: true,
           };
 
-          // Clear negihbors
+          // Clear neighbors
           const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
           console.log(neighborCoords);
           neighborCoords.forEach((neighborCoord) => {
@@ -169,11 +169,6 @@ class App extends React.Component {
             } else if(neighbor.adjacentMines > 0) {
               return;
             } else {
-              // Clear itself
-              list[neighborIndex] = {
-                ...neighbor,
-                isCleared: true,
-              }
               return clearSquare({ targetSquare: neighbor, list: list });
             }
           })
