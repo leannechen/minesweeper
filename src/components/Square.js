@@ -5,13 +5,13 @@ import styles from './Square.module.scss';
 const cx = classNames.bind(styles);
 
 function Square(props) {
-  const { x, y, adjacentMines, hasMine, isOpened, onSquareClick } = props;
+  const { x, y, adjacentMines, hasMine, isCleared, onSquareClick } = props;
 
   return (
     <li
       key={`${x}${y}`}
       className={cx('square', `number-${adjacentMines}`, {
-        'opened': isOpened,
+        'opened': isCleared,
         'hasMine': hasMine,
       })}
       onClick={onSquareClick}

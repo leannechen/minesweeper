@@ -9,7 +9,7 @@ const mockData = [
     id: "X1Y1",
     hasMine: false,
     adjacentMines: 0,
-    isOpened: false,
+    isCleared: false,
   },
   {
     x: 2,
@@ -17,7 +17,7 @@ const mockData = [
     id: "X2Y1",
     hasMine: false,
     adjacentMines: 0,
-    isOpened: true,
+    isCleared: true,
   },
   {
     x: 3,
@@ -25,7 +25,7 @@ const mockData = [
     id: "X3Y1",
     hasMine: false,
     adjacentMines: 0,
-    isOpened: false,
+    isCleared: false,
   },
   {
     x: 1,
@@ -33,7 +33,7 @@ const mockData = [
     id: "X1Y2",
     hasMine: false,
     adjacentMines: 0,
-    isOpened: false,
+    isCleared: false,
   },
   {
     x: 2,
@@ -41,7 +41,7 @@ const mockData = [
     id: "X2Y2",
     hasMine: false,
     adjacentMines: 2,
-    isOpened: true,
+    isCleared: true,
   },
   {
     x: 3,
@@ -49,7 +49,7 @@ const mockData = [
     id: "X3Y2",
     hasMine: false,
     adjacentMines: 1,
-    isOpened: true,
+    isCleared: true,
   },
   {
     x: 1,
@@ -57,7 +57,7 @@ const mockData = [
     id: "X1Y3",
     hasMine: true,
     adjacentMines: 0,
-    isOpened: true,
+    isCleared: true,
   },
   {
     x: 2,
@@ -65,7 +65,7 @@ const mockData = [
     id: "X2Y3",
     hasMine: false,
     adjacentMines: 0,
-    isOpened: false,
+    isCleared: false,
   },
   {
     x: 3,
@@ -73,7 +73,7 @@ const mockData = [
     id: "X3Y3",
     hasMine: false,
     adjacentMines: 0,
-    isOpened: false,
+    isCleared: false,
   },
 ]
 
@@ -125,13 +125,13 @@ class App extends React.Component {
       // end the game
       newSquareList = squareList.map(square => ({
         ...square,
-        ...(square.hasMine && { isOpened: true }),
+        ...(square.hasMine && { isCleared: true }),
       }))
     } else {
       newSquareList = squareList.map((square) => (square.id === squareId)?
         {
           ...square,
-          isOpened: true,
+          isCleared: true,
         }
         :
         square
@@ -145,7 +145,7 @@ class App extends React.Component {
     // const newMap = new Map();
     //
     // if(!square.hasMine && square.adjacentMines === 0) {
-    //   newMap.set(square.id, { ...square, isOpened: true });
+    //   newMap.set(square.id, { ...square, isCleared: true });
     // }
 
     // const clearArea = (item, sourceMap, targetMap) => {
@@ -162,7 +162,7 @@ class App extends React.Component {
     //     }
     //     if(!item.hasMine && item.adjacentMines === 0) {
     //       // clear self and open neighbors
-    //       targetMap.set(itemKey, { ...item, isOpened: true });
+    //       targetMap.set(itemKey, { ...item, isCleared: true });
     //       clearArea(item, sourceMap, targetMap);
     //     }
     //   });
@@ -180,7 +180,7 @@ class App extends React.Component {
     // const newSquareList = squareList.map((square) => (square.id === squareId)?
     //   {
     //     ...square,
-    //     isOpened: true,
+    //     isCleared: true,
     //   }
     //   :
     //   square
@@ -203,7 +203,7 @@ class App extends React.Component {
             id: `X${xIndex + 1}Y${yIndex + 1}`,
             hasMine: false,
             adjacentMines: 0,
-            isOpened: false,
+            isCleared: false,
           }))
       })
       .flat()
