@@ -97,9 +97,9 @@ class App extends React.Component {
   setupSquareList = () => {
     const columns = 9;
     const rows = 8;
-    const mines = 10;
+    const mineCount = 10;
 
-    const itemList = new Array(rows)
+    const squareList = new Array(rows)
       .fill()
       .map((item, yIndex) => {
         return new Array(columns)
@@ -116,12 +116,17 @@ class App extends React.Component {
       .flat()
     ;
 
-    const pickRandom = (arr, count) => {
+    // Pick random squares and return their IDs
+    const getRandomSquareIds = (arr, count) => {
+
       let copiedArr = [...arr];
+
       if(count > arr.length) {
         throw new RangeError("getRandom: More elements taken than available");
       }
-      return [...Array(count)]
+
+      return new Array(count)
+        .fill()
         .map(()=> {
           const randomIndex = Math.floor(Math.random() * copiedArr.length);
           const item = copiedArr.splice(randomIndex, 1)[0]
@@ -129,11 +134,10 @@ class App extends React.Component {
         });
     }
 
-    const randomItemIDs = pickRandom(itemList, 10);
-    console.log(randomItemIDs);
+    const randomSquareIDs = getRandomSquareIds(squareList, mineCount);
 
-    const itemListWithMines = itemList.map(item => {
-      return randomItemIDs.includes(item.id)?
+    const squareListWithMines = squareList.map(item => {
+      return randomSquareIDs.includes(item.id)?
         {
           ...item,
           hasMine: true,
@@ -142,14 +146,18 @@ class App extends React.Component {
         item;
     })
 
-    console.log(itemListWithMines)
-    // todo: distribute mines
-
-    this.setState({ squareList: itemListWithMines });
+    console.log(squareListWithMines)
+    this.setState({ squareList: squareListWithMines });
   };
 
   getSquareClassNames = ({ isOpened, adjacentMines, hasMine }) => {
     let classes = ["square"];
+
+    // FIXME: for dev
+    if(hasMine) {
+      classes = [ ...classes, "bomb" ];
+    }
+
     if(isOpened) {
       classes = [ ...classes, "opened"];
       if(hasMine) {
