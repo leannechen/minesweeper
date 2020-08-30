@@ -17,7 +17,8 @@ class App extends React.Component {
 
   componentDidMount() {
     // compute square
-    this.setupSquareList();
+    // this.setupSquareList();
+    this.setupEmptySquareList();
   }
 
   getNeighborCoords = (item, xMax, yMax, isConsideringEdge = true) => {
@@ -58,10 +59,10 @@ class App extends React.Component {
 
     if(isFirstClick) {
       this.setState({ isFirstClick: false });
-      if(hasMine) {
-        this.setupSquareList(squareId);
-        return;
-      }
+      this.setupSquareList(squareId);
+      // this.handleSquareClick(squareId)();
+
+      return;
       // todo: setup list with mines and adjacent mines, excluding 1st click's square
     }
 
@@ -122,12 +123,15 @@ class App extends React.Component {
   }
 
   handleResetBtnClick = () => {
-    this.setupSquareList();
-    this.setState({ isGameEnded: false, isFirstClick: true });
+    this.setupEmptySquareList();
+    this.setState({
+      isGameEnded: false,
+      isFirstClick: true
+    });
   }
 
-  setupSquareList = (excludingId) => {
-    const { rowCount, columnCount, mineCount } = this.state;
+  setupEmptySquareList = () => {
+    const { rowCount, columnCount } = this.state;
 
     const squareList = new Array(rowCount)
       .fill()
@@ -145,6 +149,13 @@ class App extends React.Component {
       })
       .flat()
     ;
+
+    this.setState({ squareList });
+  }
+
+  setupSquareList = (excludingId) => {
+
+    const { squareList, mineCount, columnCount, rowCount } = this.state;
 
     // Pick random squares and return their IDs
     const getRandomSquareIds = (arr, count, excludingId) => {
