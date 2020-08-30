@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './App.module.scss';
 import Square from './components/Square';
 import imgSmile from './img/laugh-solid.svg';
+import imgSad from './img/frown-open-solid.svg';
 
 const mockData = [
   {
@@ -267,7 +268,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { squareList } = this.state;
+    const { squareList, isGameEnded } = this.state;
     return (
       <div className="App">
         <main className={styles.main}>
@@ -279,7 +280,11 @@ class App extends React.Component {
                 className={styles.btnReset}
                 onClick={this.handleResetBtnClick}
               >
-                <img src={imgSmile} alt="" className={styles.imgFace}/>
+                { isGameEnded?
+                  <img src={imgSad} alt="Reset the game" className={styles.imgFace}/>
+                  :
+                  <img src={imgSmile} alt="Play the game!" className={styles.imgFace}/>
+                }
               </button>
             </div>
             <ul className={styles.board}>
