@@ -118,25 +118,64 @@ class App extends React.Component {
     // todo: 無相鄰：開一片 [recursively seek for neighbors with no mine and clear them]
     // todo: 炸彈：開啟所有炸彈，結束遊戲
 
-    const square = squareMap.get(squareId);
-
-    const clearArea = (item, targetMap) => {
-
-      const neighborCoords = this.getNeighborCoords(item);
-        neighborCoords
-        .forEach(coordinate => {
-          const itemKey = `X${coordinate.x}Y${coordinate.y}`;
-          const item = targetMap.get(itemKey);
-          if(!item.hasMine && item.adjacentMines === 0) {
-            // clear self and open neighbors
-            targetMap.set(itemKey, { ...item, isOpened: true });
-            clearArea(item, targetMap);
-          }
-        })
-        // .map(coordinate => targetMap.get(`X${coordinate.x}Y${coordinate.y}`))
-      ;
-
+    const square = squareList.find(square => square.id === squareId);
+    let newSquareList = [];
+    const { hasMine } = square;
+    if(hasMine) {
+      // end the game
+      newSquareList = squareList.map(square => ({
+        ...square,
+        ...(square.hasMine && { isOpened: true }),
+      }))
+    } else {
+      newSquareList = squareList.map((square) => (square.id === squareId)?
+        {
+          ...square,
+          isOpened: true,
+        }
+        :
+        square
+      )
     }
+
+    this.setState({ squareList: newSquareList });
+
+
+    // const square = squareMap.get(squareId);
+    // const newMap = new Map();
+    //
+    // if(!square.hasMine && square.adjacentMines === 0) {
+    //   newMap.set(square.id, { ...square, isOpened: true });
+    // }
+
+    // const clearArea = (item, sourceMap, targetMap) => {
+    //
+    //   const neighborCoords = this.getNeighborCoords(item, columns, rows);
+    //
+    //   neighborCoords.forEach(coordinate => {
+    //     const itemKey = `X${coordinate.x}Y${coordinate.y}`;
+    //     const item = sourceMap.get(itemKey);
+    //
+    //     console.log({ x: item.x, y: item.y })
+    //     if(item.x === 1 || item.x >= columns || item.y === 1 || item.y >= rows) {
+    //       return;
+    //     }
+    //     if(!item.hasMine && item.adjacentMines === 0) {
+    //       // clear self and open neighbors
+    //       targetMap.set(itemKey, { ...item, isOpened: true });
+    //       clearArea(item, sourceMap, targetMap);
+    //     }
+    //   });
+    //
+    // }
+    //
+    // clearArea(square, squareMap, newMap);
+    //
+    // console.log(newMap);
+    //
+    // this.setState((state) => {
+    //   squareMap: new Map([...state.squareMap, newMap])
+    // })
 
     // const newSquareList = squareList.map((square) => (square.id === squareId)?
     //   {
@@ -221,7 +260,6 @@ class App extends React.Component {
     squareListWithAdjacentMines.forEach(square => {
       squareMap.set(square.id, square);
     })
-    console.log(squareMap);
 
     this.setState({ squareList: squareListWithAdjacentMines });
     this.setState({ squareMap });
