@@ -82,6 +82,8 @@ class App extends React.Component {
 
   state = {
     squareList: [],
+    rows: 8,
+    columns: 9,
   }
 
   componentDidMount() {
@@ -103,8 +105,7 @@ class App extends React.Component {
   }
 
   setupSquareList = () => {
-    const columns = 9;
-    const rows = 8;
+    const { rows, columns } = this.state;
     const mineCount = 10;
 
     const squareList = new Array(rows)
@@ -168,6 +169,7 @@ class App extends React.Component {
             { squareList.map((item) => (
                 <Square
                   {...item}
+                  key={item.id}
                   onSquareClick={this.handleSquareClick(item.id)}
                 />
               ))
