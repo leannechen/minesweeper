@@ -45,8 +45,6 @@ class App extends React.Component {
 
   handleSquareClick = (squareId) => () => {
     const { squareList, columnCount, rowCount } = this.state;
-    // todo: 無相鄰：開一片 [recursively seek for neighbors with no mine and clear them]
-    // todo: 炸彈：開啟所有炸彈，結束遊戲
 
     const square = squareList.find(square => square.id === squareId);
     const { hasMine, isCleared, adjacentMines } = square;
@@ -197,9 +195,8 @@ class App extends React.Component {
       <div className="App">
         <main className={styles.main}>
           <h1 className={styles.siteTitle}>Minesweeper</h1>
-          <p>Game ended: {String(this.state.isGameEnded)}</p>
-          <div>
-            <div>
+          <div className={styles.container}>
+            <div className={styles.header}>
               <button
                 className={styles.btnReset}
                 onClick={this.handleResetBtnClick}
