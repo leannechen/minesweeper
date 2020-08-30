@@ -48,14 +48,6 @@ class App extends React.Component {
   handleSquareClick = (squareId) => () => {
     const { isFirstClick } = this.state;
 
-    if(isFirstClick) {
-      this.setState({ isFirstClick: false });
-      const startingSquareList = this.getFilledSquareList(squareId);
-      this.setState({ squareList: startingSquareList }, () => {
-        onClickSquare();
-      });
-    }
-
     const onClickSquare = () => {
 
       const { squareList, columnCount, rowCount } = this.state;
@@ -123,6 +115,16 @@ class App extends React.Component {
 
       this.setState({ squareList: newSquareList });
 
+    }
+
+    if(isFirstClick) {
+      this.setState({ isFirstClick: false });
+      const startingSquareList = this.getFilledSquareList(squareId);
+      this.setState({ squareList: startingSquareList }, () => {
+        onClickSquare();
+      });
+    } else {
+      onClickSquare();
     }
 
   }
