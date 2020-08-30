@@ -83,8 +83,8 @@ class App extends React.Component {
   state = {
     squareList: [],
     squareMap: new Map(),
-    rowCount: 3,
-    columnCount: 3,
+    rowCount: 5,
+    columnCount: 5,
     mineCount: 1,
   }
 
@@ -93,7 +93,7 @@ class App extends React.Component {
     this.setupSquareList();
   }
 
-  getNeighborCoords = (item, xMax, yMax) => {
+  getNeighborCoords = (item, xMax, yMax, isConsideringEdge = true) => {
     const { x, y } = item;
     const neighbors =
       [
@@ -105,13 +105,16 @@ class App extends React.Component {
         { x: x - 1, y: y + 1 },
         { x: x, y: y + 1 },
         { x: x + 1, y: y + 1 },
-      ]
-        .filter(coordinate => {
-          // Exclude square which is out of board range
-          const { x, y } = coordinate;
-          return (x > 0 && x <= xMax) && (y > 0 && y <= yMax);
-        })
-    return neighbors;
+      ];
+
+    return isConsideringEdge?
+      // Exclude square which is out of board range
+      neighbors.filter(coordinate => {
+        const { x, y } = coordinate;
+        return (x > 0 && x <= xMax) && (y > 0 && y <= yMax);
+      })
+      :
+      neighbors;
   }
 
   handleSquareClick = (squareId) => () => {
@@ -135,47 +138,88 @@ class App extends React.Component {
         ...(square.hasMine && { isCleared: true }),
       }))
     } else if(adjacentMines === 0) {
-      const neighborCoords = this.getNeighborCoords(square, columnCount, rowCount);
 
-      let newNeighbors = [];
+      // const neighborCoords = this.getNeighborCoords(square, columnCount, rowCount, false);
+      // console.log(neighborCoords);
+      //
+      // // Clear neighbors
+      // neighborCoords.forEach((neighborCoord) => {
+      //   const neighborIndex = squareList.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
+      //   const neighbor = squareList[neighborIndex];
+      //   if(neighbor.isCleared) {
+      //     return;
+      //   } else if(neighbor.adjacentMines > 0) {
+      //     return;
+      //   } else {
+      //     // Clear itself
+      //     copiedSquareList[neighborIndex] = {
+      //       ...neighbor,
+      //       isCleared: true,
+      //     }
+      //     // Clear its neighbors
+      //     const secondNeighborCoords = this.getNeighborCoords(neighbor, columnCount, rowCount, false);
+      //
+      //     secondNeighborCoords.forEach((secondNeighborCoord) => {
+      //       const secondNeighborIndex = copiedSquareList.findIndex(square => square.x === secondNeighborCoord.x && square.y === secondNeighborCoord.y);
+      //       const secondNeighbor = copiedSquareList[secondNeighborIndex];
+      //       if(secondNeighbor.isCleared) {
+      //         return;
+      //       } else if(secondNeighbor.adjacentMines > 0) {
+      //         return;
+      //       } else {
+      //         copiedSquareList[secondNeighborIndex] = {
+      //           ...secondNeighbor,
+      //           isCleared: true,
+      //         }
+      //       }
+      //
+      //     })
+      //
+      //   }
+      // })
 
-      // Clear neighbors
-      neighborCoords.forEach((neighborCoord) => {
-        const neighborIndex = squareList.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
-        const neighbor = squareList[neighborIndex];
-        if(neighbor.isCleared) {
-          return;
-        } else if(neighbor.adjacentMines > 0) {
-          return;
+      const clearSquare = ({ targetSquare, list }) => {
+        // Check is at the edge of the board
+        const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
+        console.log(neighborCoords);
+
+        if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount) {
+          console.log('fin')
+          console.log(list)
+          return ({
+            targetSquare, // 不會用到
+            list, // final result
+          })
         } else {
-          // Clear itself
-          copiedSquareList[neighborIndex] = {
-            ...neighbor,
-            isCleared: true,
-          }
-          // Clear its neighbors
-          const secondNeighborCoords = this.getNeighborCoords(neighbor, columnCount, rowCount);
-          secondNeighborCoords.forEach((secondNeighborCoord) => {
-            const secondNeighborIndex = copiedSquareList.findIndex(square => square.x === secondNeighborCoord.x && square.y === secondNeighborCoord.y);
-            const secondNeighbor = copiedSquareList[secondNeighborIndex];
-            if(secondNeighbor.isCleared) {
+          neighborCoords.forEach((neighborCoord) => {
+            const neighborIndex = list.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
+            const neighbor = list[neighborIndex];
+            if(neighborIndex < 0) {
               return;
-            } else if(secondNeighbor.adjacentMines > 0) {
+            } else if(neighbor.isCleared) {
+              return;
+            } else if(neighbor.adjacentMines > 0) {
               return;
             } else {
-              copiedSquareList[secondNeighborIndex] = {
-                ...secondNeighbor,
+              // Clear itself
+              list[neighborIndex] = {
+                ...neighbor,
                 isCleared: true,
               }
+              return clearSquare({ targetSquare: neighbor, list: list });
             }
-
           })
 
         }
-      })
 
-      console.log(copiedSquareList);
-      console.log(squareList);
+      }
+
+      // clearSquare({ targetSquare: square, list: copiedSquareList });
+
+      console.log(clearSquare({ targetSquare: square, list: copiedSquareList }));
+
+      // console.log(copiedSquareList);
+      // console.log(squareList);
 
       // FIXME: for dev
       newSquareList = copiedSquareList;
