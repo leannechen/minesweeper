@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import Square from './components/Square';
 
 const mockData = [
   {
@@ -177,17 +178,12 @@ class App extends React.Component {
         <main className="main">
           <h1 className="site-title">Minesweeper</h1>
           <ul className="board">
-            { squareList.map((item) =>
-              <li
-                key={`${item.x}${item.y}`}
-                className={this.getSquareClassNames(item)}
-                onClick={this.handleSquareClick(item)}
-              >
-                { item.adjacentMines > 0 && item.adjacentMines }
-                {/*X{item.x}Y{item.y}*/}
-
-              </li>)
-            }
+            { squareList.map((item) => (
+              <Square
+                {...item}
+                onSquareClick={this.handleSquareClick(item)}
+              />
+            )) }
           </ul>
         </main>
       </div>
