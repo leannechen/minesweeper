@@ -12,7 +12,7 @@ function Square(props) {
       key={`${x}${y}`}
       className={cx('square', `number-${adjacentMines}`, {
         'opened': isOpened,
-        'bomb': hasMine,
+        'hasMine': hasMine,
       })}
       onClick={onSquareClick}
     >
