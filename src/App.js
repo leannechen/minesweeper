@@ -83,8 +83,8 @@ class App extends React.Component {
   state = {
     squareList: [],
     squareMap: new Map(),
-    rows: 8,
-    columns: 9,
+    rows: 3,
+    columns: 3,
   }
 
   componentDidMount() {
@@ -196,7 +196,7 @@ class App extends React.Component {
 
   setupSquareList = () => {
     const { rows, columns } = this.state;
-    const mineCount = 10;
+    const mineCount = 1;
 
     const squareList = new Array(rows)
       .fill()

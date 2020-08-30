@@ -13,7 +13,7 @@
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: calc(var(--square-width) * 9 + var(--square-border-width) * 2);;
+  width: calc(var(--square-width) * 3 + var(--square-border-width) * 2);;
   margin: auto;
   border: var(--square-border-width) solid;
   border-right-color: #ffffff;
