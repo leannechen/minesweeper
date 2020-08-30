@@ -188,6 +188,11 @@ class App extends React.Component {
 
   }
 
+  handleResetBtnClick = () => {
+    this.setupSquareList();
+    this.setState({ isGameEnded: false });
+  }
+
   setupSquareList = () => {
     const { rowCount, columnCount, mineCount } = this.state;
 
@@ -272,7 +277,7 @@ class App extends React.Component {
             <div>
               <button
                 className={styles.btnReset}
-                onClick={() => {}}
+                onClick={this.handleResetBtnClick}
               >
                 <img src={imgSmile} alt="" className={styles.imgFace}/>
               </button>
