@@ -138,7 +138,8 @@ class App extends React.Component {
         ...(square.hasMine && { isCleared: true }),
       }))
     } else if(adjacentMines === 0) {
-
+      // Clear the square itself along with adjacent squares
+      // (as long as they do not have any adjacent mine and not exceeding board range)
       const clearSquares = ({ targetSquare, list }) => {
         // Check is at the edge of the board
         if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
@@ -183,52 +184,6 @@ class App extends React.Component {
 
     this.setState({ squareList: newSquareList });
 
-
-    // const square = squareMap.get(squareId);
-    // const newMap = new Map();
-    //
-    // if(!square.hasMine && square.adjacentMines === 0) {
-    //   newMap.set(square.id, { ...square, isCleared: true });
-    // }
-
-    // const clearArea = (item, sourceMap, targetMap) => {
-    //
-    //   const neighborCoords = this.getNeighborCoords(item, columnCount, rowCount);
-    //
-    //   neighborCoords.forEach(coordinate => {
-    //     const itemKey = `X${coordinate.x}Y${coordinate.y}`;
-    //     const item = sourceMap.get(itemKey);
-    //
-    //     console.log({ x: item.x, y: item.y })
-    //     if(item.x === 1 || item.x >= columnCount || item.y === 1 || item.y >= rowCount) {
-    //       return;
-    //     }
-    //     if(!item.hasMine && item.adjacentMines === 0) {
-    //       // clear self and open neighbors
-    //       targetMap.set(itemKey, { ...item, isCleared: true });
-    //       clearArea(item, sourceMap, targetMap);
-    //     }
-    //   });
-    //
-    // }
-    //
-    // clearArea(square, squareMap, newMap);
-    //
-    // console.log(newMap);
-    //
-    // this.setState((state) => {
-    //   squareMap: new Map([...state.squareMap, newMap])
-    // })
-
-    // const newSquareList = squareList.map((square) => (square.id === squareId)?
-    //   {
-    //     ...square,
-    //     isCleared: true,
-    //   }
-    //   :
-    //   square
-    // )
-    // this.setState({ squareList: newSquareList });
   }
 
   setupSquareList = () => {
