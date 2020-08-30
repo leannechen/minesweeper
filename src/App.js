@@ -12,6 +12,7 @@ class App extends React.Component {
     columnCount: 9,
     mineCount: 10,
     isGameEnded: false,
+    isFirstClick: true,
   }
 
   componentDidMount() {
@@ -44,7 +45,7 @@ class App extends React.Component {
   }
 
   handleSquareClick = (squareId) => () => {
-    const { squareList, columnCount, rowCount } = this.state;
+    const { squareList, columnCount, rowCount, isFirstClick } = this.state;
 
     const square = squareList.find(square => square.id === squareId);
     const { hasMine, isCleared, adjacentMines } = square;
@@ -53,6 +54,15 @@ class App extends React.Component {
 
     if(isCleared) {
       return;
+    }
+
+    if(isFirstClick) {
+      this.setState({ isFirstClick: false });
+      if(hasMine) {
+        this.setupSquareList(squareId);
+        return;
+      }
+      // todo: setup list with mines and adjacent mines, excluding 1st click's square
     }
 
     if(hasMine) {
@@ -113,10 +123,10 @@ class App extends React.Component {
 
   handleResetBtnClick = () => {
     this.setupSquareList();
-    this.setState({ isGameEnded: false });
+    this.setState({ isGameEnded: false, isFirstClick: true });
   }
 
-  setupSquareList = () => {
+  setupSquareList = (excludingId) => {
     const { rowCount, columnCount, mineCount } = this.state;
 
     const squareList = new Array(rowCount)
@@ -137,12 +147,16 @@ class App extends React.Component {
     ;
 
     // Pick random squares and return their IDs
-    const getRandomSquareIds = (arr, count) => {
+    const getRandomSquareIds = (arr, count, excludingId) => {
 
       let copiedArr = [...arr];
 
       if(count > arr.length) {
         throw new RangeError("getRandom: More elements taken than available");
+      }
+
+      if(excludingId) {
+        copiedArr = copiedArr.filter(item => item.id !== excludingId);
       }
 
       return new Array(count)
@@ -155,7 +169,7 @@ class App extends React.Component {
     }
 
     // Get squares's IDs with mine
-    const mineSquareIds = getRandomSquareIds(squareList, mineCount);
+    const mineSquareIds = getRandomSquareIds(squareList, mineCount, excludingId);
 
     // Set `hasMine` in Map type
     const squareMap = new Map();
