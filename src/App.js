@@ -16,9 +16,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // compute square
-    // this.setupSquareList();
-    this.setupEmptySquareList();
+    const emptySquareList = this.getEmptySquareList();
+    this.setState({ squareList: emptySquareList });
   }
 
   getNeighborCoords = (item, xMax, yMax, isConsideringEdge = true) => {
@@ -130,14 +129,19 @@ class App extends React.Component {
   }
 
   handleResetBtnClick = () => {
-    this.setupEmptySquareList();
+    const emptySquareList = this.getEmptySquareList();
     this.setState({
+      squareList: emptySquareList,
       isGameEnded: false,
       isFirstClick: true
     });
   }
 
-  setupEmptySquareList = () => {
+  /**
+   * Get square list without mines and adjacent mine counts
+   * @returns {{}[]} Empty square list
+   */
+  getEmptySquareList = () => {
     const { rowCount, columnCount } = this.state;
 
     const squareList = new Array(rowCount)
@@ -157,7 +161,8 @@ class App extends React.Component {
       .flat()
     ;
 
-    this.setState({ squareList });
+    return squareList;
+
   }
 
   /**
