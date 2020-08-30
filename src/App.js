@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './App.module.css';
+import styles from './App.module.scss';
 import Square from './components/Square';
+import imgSmile from './img/laugh-solid.svg';
 
 const mockData = [
   {
@@ -82,10 +83,10 @@ class App extends React.Component {
 
   state = {
     squareList: [],
-    squareMap: new Map(),
     rowCount: 9,
     columnCount: 9,
     mineCount: 10,
+    isGameEnded: false,
   }
 
   componentDidMount() {
@@ -118,7 +119,7 @@ class App extends React.Component {
   }
 
   handleSquareClick = (squareId) => () => {
-    const { squareList, squareMap, columnCount, rowCount } = this.state;
+    const { squareList, columnCount, rowCount } = this.state;
     // todo: 無相鄰：開一片 [recursively seek for neighbors with no mine and clear them]
     // todo: 炸彈：開啟所有炸彈，結束遊戲
 
@@ -137,6 +138,7 @@ class App extends React.Component {
         ...square,
         ...(square.hasMine && { isCleared: true }),
       }))
+      this.setState(({ isGameEnded: true }));
     } else if(adjacentMines === 0) {
       // Clear the square itself along with adjacent squares
       // (as long as they do not have any adjacent mine and not exceeding board range)
@@ -224,9 +226,10 @@ class App extends React.Component {
         });
     }
 
+    // Get squares's IDs with mine
     const mineSquareIds = getRandomSquareIds(squareList, mineCount);
 
-    // Set `hasMine`
+    // Set `hasMine` in Map type
     const squareMap = new Map();
     squareList.forEach(square => {
       squareMap.set(square.id, {
@@ -235,6 +238,7 @@ class App extends React.Component {
       });
     })
 
+    // Calculate adjacent mines
     const squareListWithAdjacentMines = Array.from(squareMap.keys())
       .map(itemKey => {
         const item = squareMap.get(itemKey);
@@ -254,12 +258,7 @@ class App extends React.Component {
         }
       })
 
-    squareListWithAdjacentMines.forEach(square => {
-      squareMap.set(square.id, square);
-    })
-
     this.setState({ squareList: squareListWithAdjacentMines });
-    this.setState({ squareMap });
   };
 
   render() {
@@ -268,16 +267,27 @@ class App extends React.Component {
       <div className="App">
         <main className={styles.main}>
           <h1 className={styles.siteTitle}>Minesweeper</h1>
-          <ul className={styles.board}>
-            { squareList.map((item) => (
+          <p>Game ended: {String(this.state.isGameEnded)}</p>
+          <div>
+            <div>
+              <button
+                className={styles.btnReset}
+                onClick={() => {}}
+              >
+                <img src={imgSmile} alt="" className={styles.imgFace}/>
+              </button>
+            </div>
+            <ul className={styles.board}>
+              { squareList.map((item) => (
                 <Square
                   {...item}
                   key={item.id}
                   onSquareClick={this.handleSquareClick(item.id)}
                 />
               ))
-            }
-          </ul>
+              }
+            </ul>
+          </div>
         </main>
       </div>
     );
