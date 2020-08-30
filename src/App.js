@@ -72,7 +72,7 @@ class App extends React.Component {
         // (as long as they do not have any adjacent mine and not exceeding board range)
         const clearSquares = ({ targetSquare, list }) => {
           // Check is at the edge of the board
-          if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
+          if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared) {
             return ({
               targetSquare, // 不會用到
               list, // final result
@@ -84,6 +84,12 @@ class App extends React.Component {
               ...targetSquare,
               isCleared: true,
             };
+
+            if(targetSquare.adjacentMines > 0) {
+              return ({
+                list,
+              })
+            }
 
             // Clear neighbors
             const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
