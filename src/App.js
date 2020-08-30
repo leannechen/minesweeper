@@ -85,6 +85,7 @@ class App extends React.Component {
     squareMap: new Map(),
     rows: 3,
     columns: 3,
+    mineCount: 1,
   }
 
   componentDidMount() {
@@ -119,7 +120,7 @@ class App extends React.Component {
     // todo: 炸彈：開啟所有炸彈，結束遊戲
 
     const square = squareList.find(square => square.id === squareId);
-    const { hasMine, isCleared } = square;
+    const { hasMine, isCleared, adjacentMines } = square;
     let newSquareList = [];
 
     if(isCleared) {
@@ -195,8 +196,7 @@ class App extends React.Component {
   }
 
   setupSquareList = () => {
-    const { rows, columns } = this.state;
-    const mineCount = 1;
+    const { rows, columns, mineCount } = this.state;
 
     const squareList = new Array(rows)
       .fill()
