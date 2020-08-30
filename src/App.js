@@ -83,8 +83,8 @@ class App extends React.Component {
   state = {
     squareList: [],
     squareMap: new Map(),
-    rows: 3,
-    columns: 3,
+    rowCount: 3,
+    columnCount: 3,
     mineCount: 1,
   }
 
@@ -115,7 +115,7 @@ class App extends React.Component {
   }
 
   handleSquareClick = (squareId) => () => {
-    const { squareList, squareMap, columns, rows } = this.state;
+    const { squareList, squareMap, columnCount, rowCount } = this.state;
     // todo: 無相鄰：開一片 [recursively seek for neighbors with no mine and clear them]
     // todo: 炸彈：開啟所有炸彈，結束遊戲
 
@@ -157,14 +157,14 @@ class App extends React.Component {
 
     // const clearArea = (item, sourceMap, targetMap) => {
     //
-    //   const neighborCoords = this.getNeighborCoords(item, columns, rows);
+    //   const neighborCoords = this.getNeighborCoords(item, columnCount, rowCount);
     //
     //   neighborCoords.forEach(coordinate => {
     //     const itemKey = `X${coordinate.x}Y${coordinate.y}`;
     //     const item = sourceMap.get(itemKey);
     //
     //     console.log({ x: item.x, y: item.y })
-    //     if(item.x === 1 || item.x >= columns || item.y === 1 || item.y >= rows) {
+    //     if(item.x === 1 || item.x >= columnCount || item.y === 1 || item.y >= rowCount) {
     //       return;
     //     }
     //     if(!item.hasMine && item.adjacentMines === 0) {
@@ -196,12 +196,12 @@ class App extends React.Component {
   }
 
   setupSquareList = () => {
-    const { rows, columns, mineCount } = this.state;
+    const { rowCount, columnCount, mineCount } = this.state;
 
-    const squareList = new Array(rows)
+    const squareList = new Array(rowCount)
       .fill()
       .map((item, yIndex) => {
-        return new Array(columns)
+        return new Array(columnCount)
           .fill()
           .map((item, xIndex) => ({
             x: xIndex + 1,
@@ -247,7 +247,7 @@ class App extends React.Component {
     const squareListWithAdjacentMines = Array.from(squareMap.keys())
       .map(itemKey => {
         const item = squareMap.get(itemKey);
-        const neighborCoords = this.getNeighborCoords(item, columns, rows);
+        const neighborCoords = this.getNeighborCoords(item, columnCount, rowCount);
 
         // find squares with mine
         const neighborWithMines = neighborCoords.filter(coordinate => {
