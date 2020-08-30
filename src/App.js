@@ -142,18 +142,35 @@ class App extends React.Component {
       // Clear neighbors
       neighborCoords.forEach((neighborCoord) => {
         const neighborIndex = squareList.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
-        console.log(neighborIndex);
         const neighbor = squareList[neighborIndex];
         if(neighbor.isCleared) {
           return;
         } else if(neighbor.adjacentMines > 0) {
           return;
         } else {
+          // Clear itself
           copiedSquareList[neighborIndex] = {
             ...neighbor,
             isCleared: true,
           }
-          // newNeighbors.push({ ...neighbor, isCleared: true });
+          // Clear its neighbors
+          const secondNeighborCoords = this.getNeighborCoords(neighbor, columnCount, rowCount);
+          secondNeighborCoords.forEach((secondNeighborCoord) => {
+            const secondNeighborIndex = copiedSquareList.findIndex(square => square.x === secondNeighborCoord.x && square.y === secondNeighborCoord.y);
+            const secondNeighbor = copiedSquareList[secondNeighborIndex];
+            if(secondNeighbor.isCleared) {
+              return;
+            } else if(secondNeighbor.adjacentMines > 0) {
+              return;
+            } else {
+              copiedSquareList[secondNeighborIndex] = {
+                ...secondNeighbor,
+                isCleared: true,
+              }
+            }
+
+          })
+
         }
       })
 
@@ -161,15 +178,7 @@ class App extends React.Component {
       console.log(squareList);
 
       // FIXME: for dev
-      newSquareList = squareList.map((square) => (square.id === squareId)?
-        {
-          ...square,
-          isCleared: true,
-        }
-        :
-        square
-      )
-
+      newSquareList = copiedSquareList;
     } else {
       // Clears the square
       newSquareList = squareList.map((square) => (square.id === squareId)?
