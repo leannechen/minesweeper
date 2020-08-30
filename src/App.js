@@ -119,15 +119,21 @@ class App extends React.Component {
     // todo: 炸彈：開啟所有炸彈，結束遊戲
 
     const square = squareList.find(square => square.id === squareId);
+    const { hasMine, isCleared } = square;
     let newSquareList = [];
-    const { hasMine } = square;
+
+    if(isCleared) {
+      return;
+    }
+
     if(hasMine) {
-      // end the game
+      // Ends the game
       newSquareList = squareList.map(square => ({
         ...square,
         ...(square.hasMine && { isCleared: true }),
       }))
     } else {
+      // Clears the square
       newSquareList = squareList.map((square) => (square.id === squareId)?
         {
           ...square,
