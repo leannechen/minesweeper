@@ -50,7 +50,7 @@ class App extends React.Component {
 
     if(isFirstClick) {
       this.setState({ isFirstClick: false });
-      const startingSquareList = this.setupSquareList(squareId);
+      const startingSquareList = this.getFilledSquareList(squareId);
       this.setState({ squareList: startingSquareList }, () => {
         onClickSquare();
       });
@@ -158,7 +158,12 @@ class App extends React.Component {
     this.setState({ squareList });
   }
 
-  setupSquareList = (excludingId) => {
+  /**
+   * Get square list with mines and adjacent mine counts set
+   * @param excludingId {string} Target square to exclude when locating mines
+   * @returns {{}[]} Filled square list
+   */
+  getFilledSquareList = (excludingId) => {
 
     const { squareList, mineCount, columnCount, rowCount } = this.state;
 
