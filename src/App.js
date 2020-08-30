@@ -141,7 +141,7 @@ class App extends React.Component {
 
       const clearSquare = ({ targetSquare, list }) => {
         // Check is at the edge of the board
-        if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount) {
+        if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
           console.log('fin')
           console.log(list)
           return ({
@@ -161,13 +161,9 @@ class App extends React.Component {
           neighborCoords.forEach((neighborCoord) => {
             const neighborIndex = list.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
             const neighbor = list[neighborIndex];
-            if(neighborIndex < 0 || neighbor.isCleared || neighbor.adjacentMines > 0) {
-              return ({
-                list: list,
-              });
-            } else {
-              return clearSquare({ targetSquare: neighbor, list: list });
-            }
+
+            return neighbor? clearSquare({ targetSquare: neighbor, list: list }): ({ targetSquare: list[targetSquareIndex], list });
+
           })
 
         }
