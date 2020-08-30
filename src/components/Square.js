@@ -5,7 +5,13 @@ import styles from './Square.module.scss';
 const cx = classNames.bind(styles);
 
 function Square(props) {
-  const { x, y, adjacentMines, hasMine, isCleared, onSquareClick } = props;
+  const { x, y, adjacentMines, hasMine, isCleared, isDisabled, onSquareClick } = props;
+
+  const handleClick = () => {
+    if(!isDisabled) {
+      onSquareClick();
+    }
+  }
 
   return (
     <li
@@ -14,7 +20,7 @@ function Square(props) {
         'opened': isCleared,
         'hasMine': isCleared && hasMine,
       })}
-      onClick={onSquareClick}
+      onClick={handleClick}
     >
       { (isCleared && adjacentMines > 0 && !hasMine) && adjacentMines }
     </li>

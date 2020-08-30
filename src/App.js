@@ -261,6 +261,7 @@ class App extends React.Component {
                 <Square
                   {...item}
                   key={item.id}
+                  isDisabled={isGameEnded}
                   onSquareClick={this.handleSquareClick(item.id)}
                 />
               ))
