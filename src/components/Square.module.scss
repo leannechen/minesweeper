@@ -19,24 +19,24 @@
     background-color: #c0c0c0;
     border: 2px solid #8b8b8b;
   }
-}
 
-.square.number-1 {
-  color: #0034ff;
-}
+  &.number-1 {
+    color: #0034ff;
+  }
 
-.square.number-2 {
-  color: #007f00;
-}
+  &.number-2 {
+    color: #007f00;
+  }
 
-.square.number-3 {
-  color: #ff1b01;
-}
+  &.number-3 {
+    color: #ff1b01;
+  }
 
-.square.bomb {
-  background-color: #ff1b01;
-  background-image: url("../img/bomb-solid.svg");
-  background-size: 80%;
-  background-repeat: no-repeat;
-  background-position: center;
+  &.bomb {
+    background-color: #ff1b01;
+    background-image: url("../img/bomb-solid.svg");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 }
