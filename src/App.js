@@ -99,7 +99,7 @@ class App extends React.Component {
     const rows = 8;
     const mines = 10;
 
-    const nestedArr = new Array(rows)
+    const itemList = new Array(rows)
       .fill()
       .map((item, yIndex) => {
         return new Array(columns)
@@ -107,16 +107,45 @@ class App extends React.Component {
           .map((item, xIndex) => ({
             x: xIndex + 1,
             y: yIndex + 1,
+            id: `X${xIndex + 1}Y${yIndex + 1}`,
             hasMine: false,
             adjacentMines: 0,
             isOpened: false,
           }))
       })
+      .flat()
+    ;
 
-    this.setState({ squareList: nestedArr.flat() });
-    console.log(nestedArr.flat());
+    const pickRandom = (arr, count) => {
+      let copiedArr = [...arr];
+      if(count > arr.length) {
+        throw new RangeError("getRandom: More elements taken than available");
+      }
+      return [...Array(count)]
+        .map(()=> {
+          const randomIndex = Math.floor(Math.random() * copiedArr.length);
+          const item = copiedArr.splice(randomIndex, 1)[0]
+          return `X${item.x}Y${item.y}`;
+        });
+    }
 
-    // flatten nestedArr
+    const randomItemIDs = pickRandom(itemList, 10);
+    console.log(randomItemIDs);
+
+    const itemListWithMines = itemList.map(item => {
+      return randomItemIDs.includes(item.id)?
+        {
+          ...item,
+          hasMine: true,
+        }
+        :
+        item;
+    })
+
+    console.log(itemListWithMines)
+    // todo: distribute mines
+
+    this.setState({ squareList: itemListWithMines });
   };
 
   getSquareClassNames = ({ isOpened, adjacentMines, hasMine }) => {
