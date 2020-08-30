@@ -12,11 +12,11 @@ function Square(props) {
       key={`${x}${y}`}
       className={cx('square', `number-${adjacentMines}`, {
         'opened': isCleared,
-        'hasMine': hasMine,
+        'hasMine': isCleared && hasMine,
       })}
       onClick={onSquareClick}
     >
-      { adjacentMines > 0 && adjacentMines }
+      { (isCleared && adjacentMines > 0 && !hasMine) && adjacentMines }
     </li>
   )
 }
