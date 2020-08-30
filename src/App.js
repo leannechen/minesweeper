@@ -139,7 +139,7 @@ class App extends React.Component {
       }))
     } else if(adjacentMines === 0) {
 
-      const clearSquare = ({ targetSquare, list }) => {
+      const clearSquares = ({ targetSquare, list }) => {
         // Check is at the edge of the board
         if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
           return ({
@@ -154,21 +154,11 @@ class App extends React.Component {
             isCleared: true,
           };
 
-          // const newList = list.map(item => {
-          //   return (item.x === targetSquare.x && item.y === targetSquare.y)?
-          //     {
-          //       ...item,
-          //       isCleared: true
-          //     }
-          //     :
-          //     item
-          // })
-
           // Clear neighbors
           const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
           neighborCoords.forEach((neighborCoord) => {
             const neighbor = list.find(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
-            return neighbor? clearSquare({ targetSquare: neighbor, list: list }): ({ list: list });
+            return neighbor? clearSquares({ targetSquare: neighbor, list: list }): ({ list: list });
           })
 
         }
@@ -176,17 +166,9 @@ class App extends React.Component {
         return list;
       }
 
-      // clearSquare({ targetSquare: square, list: copiedSquareList });
+      const clearedList = clearSquares({ targetSquare: square, list: copiedSquareList });
 
-      // console.log(clearSquare({ targetSquare: square, list: copiedSquareList }));
-      const newList = clearSquare({ targetSquare: square, list: copiedSquareList });
-      console.log(newList);
-
-      // console.log(copiedSquareList);
-      // console.log(squareList);
-
-      // FIXME: for dev
-      newSquareList = copiedSquareList;
+      newSquareList = clearedList;
     } else {
       // Clears the square
       newSquareList = squareList.map((square) => (square.id === squareId)?
