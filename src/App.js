@@ -142,8 +142,6 @@ class App extends React.Component {
       const clearSquare = ({ targetSquare, list }) => {
         // Check is at the edge of the board
         if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
-          console.log('fin')
-          console.log(list)
           return ({
             targetSquare, // 不會用到
             list, // final result
@@ -156,23 +154,33 @@ class App extends React.Component {
             isCleared: true,
           };
 
+          // const newList = list.map(item => {
+          //   return (item.x === targetSquare.x && item.y === targetSquare.y)?
+          //     {
+          //       ...item,
+          //       isCleared: true
+          //     }
+          //     :
+          //     item
+          // })
+
           // Clear neighbors
           const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
           neighborCoords.forEach((neighborCoord) => {
-            const neighborIndex = list.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
-            const neighbor = list[neighborIndex];
-
-            return neighbor? clearSquare({ targetSquare: neighbor, list: list }): ({ targetSquare: list[targetSquareIndex], list });
-
+            const neighbor = list.find(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
+            return neighbor? clearSquare({ targetSquare: neighbor, list: list }): ({ list: list });
           })
 
         }
 
+        return list;
       }
 
       // clearSquare({ targetSquare: square, list: copiedSquareList });
 
-      console.log(clearSquare({ targetSquare: square, list: copiedSquareList }));
+      // console.log(clearSquare({ targetSquare: square, list: copiedSquareList }));
+      const newList = clearSquare({ targetSquare: square, list: copiedSquareList });
+      console.log(newList);
 
       // console.log(copiedSquareList);
       // console.log(squareList);
