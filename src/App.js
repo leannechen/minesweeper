@@ -46,79 +46,84 @@ class App extends React.Component {
   }
 
   handleSquareClick = (squareId) => () => {
-    const { squareList, columnCount, rowCount, isFirstClick } = this.state;
-
-    const square = squareList.find(square => square.id === squareId);
-    const { hasMine, isCleared, adjacentMines } = square;
-    let newSquareList = [];
-    let copiedSquareList = [...squareList];
-
-    if(isCleared) {
-      return;
-    }
+    const { isFirstClick } = this.state;
 
     if(isFirstClick) {
       this.setState({ isFirstClick: false });
-      this.setupSquareList(squareId);
-      // this.handleSquareClick(squareId)();
-
-      return;
-      // todo: setup list with mines and adjacent mines, excluding 1st click's square
+      const startingSquareList = this.setupSquareList(squareId);
+      this.setState({ squareList: startingSquareList }, () => {
+        onClickSquare();
+      });
     }
 
-    if(hasMine) {
-      // Ends the game
-      newSquareList = squareList.map(square => ({
-        ...square,
-        ...(square.hasMine && { isCleared: true }),
-      }))
-      this.setState(({ isGameEnded: true }));
-    } else if(adjacentMines === 0) {
-      // Clear the square itself along with adjacent squares
-      // (as long as they do not have any adjacent mine and not exceeding board range)
-      const clearSquares = ({ targetSquare, list }) => {
-        // Check is at the edge of the board
-        if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
-          return ({
-            targetSquare, // 不會用到
-            list, // final result
-          })
-        } else {
-          // Clear itself
-          const targetSquareIndex = list.findIndex(square => square.x === targetSquare.x && square.y === targetSquare.y);
-          list[targetSquareIndex] = {
-            ...targetSquare,
-            isCleared: true,
-          };
+    const onClickSquare = () => {
 
-          // Clear neighbors
-          const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
-          neighborCoords.forEach((neighborCoord) => {
-            const neighbor = list.find(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
-            return neighbor? clearSquares({ targetSquare: neighbor, list: list }): ({ list: list });
-          })
+      const { squareList, columnCount, rowCount } = this.state;
 
-        }
+      const square = squareList.find(square => square.id === squareId);
+      const { hasMine, isCleared, adjacentMines } = square;
+      let newSquareList = [];
+      let copiedSquareList = [...squareList];
 
-        return list;
+      if(isCleared) {
+        return;
       }
 
-      const clearedList = clearSquares({ targetSquare: square, list: copiedSquareList });
-
-      newSquareList = clearedList;
-    } else {
-      // Clears the square
-      newSquareList = squareList.map((square) => (square.id === squareId)?
-        {
+      if(hasMine) {
+        // Ends the game
+        newSquareList = squareList.map(square => ({
           ...square,
-          isCleared: true,
-        }
-        :
-        square
-      )
-    }
+          ...(square.hasMine && { isCleared: true }),
+        }))
+        this.setState(({ isGameEnded: true }));
+      } else if(adjacentMines === 0) {
+        // Clear the square itself along with adjacent squares
+        // (as long as they do not have any adjacent mine and not exceeding board range)
+        const clearSquares = ({ targetSquare, list }) => {
+          // Check is at the edge of the board
+          if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount || targetSquare.isCleared || targetSquare.adjacentMines > 0) {
+            return ({
+              targetSquare, // 不會用到
+              list, // final result
+            })
+          } else {
+            // Clear itself
+            const targetSquareIndex = list.findIndex(square => square.x === targetSquare.x && square.y === targetSquare.y);
+            list[targetSquareIndex] = {
+              ...targetSquare,
+              isCleared: true,
+            };
 
-    this.setState({ squareList: newSquareList });
+            // Clear neighbors
+            const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
+            neighborCoords.forEach((neighborCoord) => {
+              const neighbor = list.find(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
+              return neighbor? clearSquares({ targetSquare: neighbor, list: list }): ({ list: list });
+            })
+
+          }
+
+          return list;
+        }
+
+        const clearedList = clearSquares({ targetSquare: square, list: copiedSquareList });
+
+        newSquareList = clearedList;
+      } else {
+        // Clears the square
+        newSquareList = squareList.map((square) => (square.id === squareId)?
+          {
+            ...square,
+            isCleared: true,
+          }
+          :
+          square
+        )
+      }
+
+      this.setState({ squareList: newSquareList });
+
+    }
 
   }
 
@@ -211,7 +216,7 @@ class App extends React.Component {
         }
       })
 
-    this.setState({ squareList: squareListWithAdjacentMines });
+    return squareListWithAdjacentMines;
   };
 
   render() {
