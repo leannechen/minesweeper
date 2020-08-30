@@ -82,6 +82,7 @@ class App extends React.Component {
 
   state = {
     squareList: [],
+    squareMap: new Map(),
     rows: 8,
     columns: 9,
   }
@@ -143,20 +144,55 @@ class App extends React.Component {
         });
     }
 
-    const randomSquareIDs = getRandomSquareIds(squareList, mineCount);
+    const mineSquareIds = getRandomSquareIds(squareList, mineCount);
 
-    const squareListWithMines = squareList.map(item => {
-      const hasMine = randomSquareIDs.includes(item.id);
-      // let
-      // todo: cal adjacent mine
-      return {
-        ...item,
-        hasMine,
-      }
+    // Set `hasMine`
+    const myMap = new Map();
+    squareList.forEach(square => {
+      myMap.set(square.id, {
+        ...square,
+        hasMine: mineSquareIds.includes(square.id),
+      });
     })
 
-    console.log(squareListWithMines)
-    this.setState({ squareList: squareListWithMines });
+    const squareListWithAdjacentMines = Array.from(myMap.keys())
+      .map(itemKey => {
+        const item = myMap.get(itemKey);
+        const { x, y } = item;
+
+        const neighborWithMines =
+          [
+            { x: x - 1, y: y - 1 },
+            { x: x, y: y - 1 },
+            { x: x + 1, y: y - 1 },
+            { x: x - 1, y: y },
+            { x: x + 1, y: y },
+            { x: x - 1, y: y + 1 },
+            { x: x, y: y + 1 },
+            { x: x + 1, y: y + 1 },
+          ]
+          .filter(coordinate => {
+            // Exclude square which is out of board range
+            const { x, y } = coordinate;
+            return (x > 0 && x <= columns) && (y > 0 && y <= rows);
+          })
+          .filter(coordinate => {
+            // find squares with mine
+            const { x, y } = coordinate;
+            const key = `X${x}Y${y}`;
+            const neighbor = myMap.get(key);
+            return neighbor.hasMine;
+          });
+
+        return {
+          ...item,
+          adjacentMines: neighborWithMines.length,
+        }
+      })
+
+    console.log(squareListWithAdjacentMines);
+
+    this.setState({ squareList: squareListWithAdjacentMines });
   };
 
   render() {
