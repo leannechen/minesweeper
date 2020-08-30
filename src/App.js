@@ -83,9 +83,9 @@ class App extends React.Component {
   state = {
     squareList: [],
     squareMap: new Map(),
-    rowCount: 5,
-    columnCount: 5,
-    mineCount: 1,
+    rowCount: 9,
+    columnCount: 9,
+    mineCount: 10,
   }
 
   componentDidMount() {
@@ -139,50 +139,8 @@ class App extends React.Component {
       }))
     } else if(adjacentMines === 0) {
 
-      // const neighborCoords = this.getNeighborCoords(square, columnCount, rowCount, false);
-      // console.log(neighborCoords);
-      //
-      // // Clear neighbors
-      // neighborCoords.forEach((neighborCoord) => {
-      //   const neighborIndex = squareList.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
-      //   const neighbor = squareList[neighborIndex];
-      //   if(neighbor.isCleared) {
-      //     return;
-      //   } else if(neighbor.adjacentMines > 0) {
-      //     return;
-      //   } else {
-      //     // Clear itself
-      //     copiedSquareList[neighborIndex] = {
-      //       ...neighbor,
-      //       isCleared: true,
-      //     }
-      //     // Clear its neighbors
-      //     const secondNeighborCoords = this.getNeighborCoords(neighbor, columnCount, rowCount, false);
-      //
-      //     secondNeighborCoords.forEach((secondNeighborCoord) => {
-      //       const secondNeighborIndex = copiedSquareList.findIndex(square => square.x === secondNeighborCoord.x && square.y === secondNeighborCoord.y);
-      //       const secondNeighbor = copiedSquareList[secondNeighborIndex];
-      //       if(secondNeighbor.isCleared) {
-      //         return;
-      //       } else if(secondNeighbor.adjacentMines > 0) {
-      //         return;
-      //       } else {
-      //         copiedSquareList[secondNeighborIndex] = {
-      //           ...secondNeighbor,
-      //           isCleared: true,
-      //         }
-      //       }
-      //
-      //     })
-      //
-      //   }
-      // })
-
       const clearSquare = ({ targetSquare, list }) => {
         // Check is at the edge of the board
-        const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
-        console.log(neighborCoords);
-
         if(targetSquare.x < 1 || targetSquare.y < 1 || targetSquare.x > columnCount || targetSquare.y > columnCount) {
           console.log('fin')
           console.log(list)
@@ -191,6 +149,16 @@ class App extends React.Component {
             list, // final result
           })
         } else {
+          // Clear itself
+          const targetSquareIndex = list.findIndex(square => square.x === targetSquare.x && square.y === targetSquare.y);
+          list[targetSquareIndex] = {
+            ...targetSquare,
+            isCleared: true,
+          };
+
+          // Clear negihbors
+          const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
+          console.log(neighborCoords);
           neighborCoords.forEach((neighborCoord) => {
             const neighborIndex = list.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
             const neighbor = list[neighborIndex];
