@@ -150,27 +150,7 @@ class App extends React.Component {
     console.log(squareListWithMines)
     this.setState({ squareList: squareListWithMines });
   };
-
-  getSquareClassNames = ({ isOpened, adjacentMines, hasMine }) => {
-    let classes = ["square"];
-
-    // FIXME: for dev
-    if(hasMine) {
-      classes = [ ...classes, "bomb" ];
-    }
-
-    if(isOpened) {
-      classes = [ ...classes, "opened"];
-      if(hasMine) {
-        classes = [ ...classes, "bomb" ];
-      } else if(adjacentMines > 0) {
-        classes = [ ...classes, `number-${adjacentMines}` ];
-      }
-    }
-
-    return classes.join(" ");
-  }
-
+  
   render() {
     const { squareList } = this.state;
     return (

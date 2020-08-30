@@ -1,33 +1,19 @@
 import React from 'react';
-import styles from './Square.module.css';
+import classNames from 'classnames/bind';
+import styles from './Square.module.scss';
+
+const cx = classNames.bind(styles);
 
 function Square(props) {
   const { x, y, adjacentMines, hasMine, isOpened, onSquareClick } = props;
 
-  const getSquareClassNames = () => {
-    let classes = ["square"];
-
-    // FIXME: for dev
-    if(hasMine) {
-      classes = [ ...classes, "bomb" ];
-    }
-
-    if(isOpened) {
-      classes = [ ...classes, "opened"];
-      if(hasMine) {
-        classes = [ ...classes, "bomb" ];
-      } else if(adjacentMines > 0) {
-        classes = [ ...classes, `number-${adjacentMines}` ];
-      }
-    }
-
-    return classes.join(" ");
-  }
-
   return (
     <li
       key={`${x}${y}`}
-      className={styles.square}
+      className={cx('square', `number-${adjacentMines}`, {
+        'opened': isOpened,
+        'bomb': hasMine,
+      })}
       onClick={onSquareClick}
     >
       { adjacentMines > 0 && adjacentMines }

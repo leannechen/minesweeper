@@ -14,11 +14,11 @@
   user-select: none;
   font-size: 1.8rem;
   color: #0034ff;
-}
 
-.square.opened {
-  background-color: #c0c0c0;
-  border: 2px solid #8b8b8b;
+  &.opened {
+    background-color: #c0c0c0;
+    border: 2px solid #8b8b8b;
+  }
 }
 
 .square.number-1 {
