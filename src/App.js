@@ -158,16 +158,13 @@ class App extends React.Component {
 
           // Clear neighbors
           const neighborCoords = this.getNeighborCoords(targetSquare, columnCount, rowCount, false);
-          console.log(neighborCoords);
           neighborCoords.forEach((neighborCoord) => {
             const neighborIndex = list.findIndex(square => square.x === neighborCoord.x && square.y === neighborCoord.y);
             const neighbor = list[neighborIndex];
-            if(neighborIndex < 0) {
-              return;
-            } else if(neighbor.isCleared) {
-              return;
-            } else if(neighbor.adjacentMines > 0) {
-              return;
+            if(neighborIndex < 0 || neighbor.isCleared || neighbor.adjacentMines > 0) {
+              return ({
+                list: list,
+              });
             } else {
               return clearSquare({ targetSquare: neighbor, list: list });
             }
