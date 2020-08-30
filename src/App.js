@@ -6,6 +6,7 @@ const mockData = [
   {
     x: 1,
     y: 1,
+    id: "X1Y1",
     hasMine: false,
     adjacentMines: 0,
     isOpened: false,
@@ -13,6 +14,7 @@ const mockData = [
   {
     x: 2,
     y: 1,
+    id: "X2Y1",
     hasMine: false,
     adjacentMines: 0,
     isOpened: true,
@@ -20,6 +22,7 @@ const mockData = [
   {
     x: 3,
     y: 1,
+    id: "X3Y1",
     hasMine: false,
     adjacentMines: 0,
     isOpened: false,
@@ -27,6 +30,7 @@ const mockData = [
   {
     x: 1,
     y: 2,
+    id: "X1Y2",
     hasMine: false,
     adjacentMines: 0,
     isOpened: false,
@@ -34,6 +38,7 @@ const mockData = [
   {
     x: 2,
     y: 2,
+    id: "X2Y2",
     hasMine: false,
     adjacentMines: 2,
     isOpened: true,
@@ -41,6 +46,7 @@ const mockData = [
   {
     x: 3,
     y: 2,
+    id: "X3Y2",
     hasMine: false,
     adjacentMines: 1,
     isOpened: true,
@@ -48,6 +54,7 @@ const mockData = [
   {
     x: 1,
     y: 3,
+    id: "X1Y3",
     hasMine: true,
     adjacentMines: 0,
     isOpened: true,
@@ -55,6 +62,7 @@ const mockData = [
   {
     x: 2,
     y: 3,
+    id: "X2Y3",
     hasMine: false,
     adjacentMines: 0,
     isOpened: false,
@@ -62,6 +70,7 @@ const mockData = [
   {
     x: 3,
     y: 3,
+    id: "X3Y3",
     hasMine: false,
     adjacentMines: 0,
     isOpened: false,
@@ -80,11 +89,9 @@ class App extends React.Component {
     this.setupSquareList();
   }
 
-  handleSquareClick = (item) => () => {
-    const { x, y } = item;
+  handleSquareClick = (squareId) => () => {
     const { squareList } = this.state;
-    const targetSquareIndex = squareList.findIndex(square => square.x === x && square.y === y);
-    const newSquareList = squareList.map((square, index) => (index === targetSquareIndex)?
+    const newSquareList = squareList.map((square) => (square.id === squareId)?
       {
         ...square,
         isOpened: true,
@@ -138,19 +145,19 @@ class App extends React.Component {
     const randomSquareIDs = getRandomSquareIds(squareList, mineCount);
 
     const squareListWithMines = squareList.map(item => {
-      return randomSquareIDs.includes(item.id)?
-        {
-          ...item,
-          hasMine: true,
-        }
-        :
-        item;
+      const hasMine = randomSquareIDs.includes(item.id);
+      // let
+      // todo: cal adjacent mine
+      return {
+        ...item,
+        hasMine,
+      }
     })
 
     console.log(squareListWithMines)
     this.setState({ squareList: squareListWithMines });
   };
-  
+
   render() {
     const { squareList } = this.state;
     return (
@@ -159,11 +166,12 @@ class App extends React.Component {
           <h1 className={styles.siteTitle}>Minesweeper</h1>
           <ul className={styles.board}>
             { squareList.map((item) => (
-              <Square
-                {...item}
-                onSquareClick={this.handleSquareClick(item)}
-              />
-            )) }
+                <Square
+                  {...item}
+                  onSquareClick={this.handleSquareClick(item.id)}
+                />
+              ))
+            }
           </ul>
         </main>
       </div>
