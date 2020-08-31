@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@700&display=swap');
 
 :root {
   --background-color: #262626;
@@ -14,7 +15,7 @@
 
 body {
   background-color: var(--background-color);
-  font-family: 'Orbitron', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Changa', sans-serif;
 }
